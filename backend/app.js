@@ -20,7 +20,23 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/places", async (req, res) => {
+app.get("/", async (_, res) => {
+  res.status(200).json({
+    name: "Places API",
+    version: "1.0.0",
+    endpoints: {
+      places: {
+        GET: "/places",
+      },
+      "user-places": {
+        GET: "/user-places",
+        PUT: "/user-places/:places",
+      },
+    },
+  });
+});
+
+app.get("/places", async (_, res) => {
   const fileContent = await fs.readFile("./data/places.json");
 
   const placesData = JSON.parse(fileContent);
@@ -28,7 +44,7 @@ app.get("/places", async (req, res) => {
   res.status(200).json({ places: placesData });
 });
 
-app.get("/user-places", async (req, res) => {
+app.get("/user-places", async (_, res) => {
   const fileContent = await fs.readFile("./data/user-places.json");
 
   const places = JSON.parse(fileContent);
